@@ -7,6 +7,17 @@ from tkinter import NSEW, Canvas, Label, Tk
 from pychecs2.echecs.partie import Partie
 
 # Dans ce fichier il faut lier les classe et méthodes du tp3 avec l'interface
+# Il faut aussi faire des classes d'exception que l'on va callback dans le programme de l'interface
+# en faisant de try-except
+
+class AucunePieceAPosition(Exception):
+    pass
+
+class DeplacementInvalide(Exception):
+    pass
+
+class PieceDeMauvaiseCouleur(Exception):
+    pass
 
 
 class CanvasEchiquier(Canvas):
