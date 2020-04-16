@@ -267,6 +267,11 @@ class Echiquier:
             bool: True si le déplacement était valide et a été effectué, et False autrement.
 
         """
+        # Méthode à modifier avec les exceptions
+        # Il faut que l'on puisse déplacer les pions sans avoir à valider les position préalablement :
+        # exemple: si le déplacement demandé était invalide,
+        # le déplacement ne sera pas effectué et une exception sera reçue.
+
         if not self.deplacement_est_valide(position_source, position_cible):
             return False
 

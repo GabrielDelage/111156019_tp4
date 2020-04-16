@@ -1,12 +1,10 @@
 """Solution du laboratoire, permettant de bien comprendre comment hériter d'un widget de tkinter, de dessiner
 un échiquier dans un Canvas, puis de déterminer quelle case a été sélectionnée.
 
-"""
-from tkinter import NSEW, Canvas, Label, Tk
-# Exemple d'importation de la classe Partie.
-from pychecs2.echecs.partie import Partie
+Auteur: Jean-Francis Roy
 
-# Dans ce fichier il faut lier les classe et méthodes du tp3 avec l'interface
+"""
+from tkinter import Tk, Canvas, Label, NSEW
 
 
 class CanvasEchiquier(Canvas):
@@ -152,3 +150,8 @@ class Fenetre(Tk):
         except KeyError:
             self.messages['foreground'] = 'red'
             self.messages['text'] = 'Erreur: Aucune pièce à cet endroit.'
+
+
+if __name__ == '__main__':
+    f = Fenetre()
+    f.mainloop()
