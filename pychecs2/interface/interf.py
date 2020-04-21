@@ -119,6 +119,7 @@ class CanvasEchiquier(Canvas):
 
 
 class Fenetre(Tk):
+
     def __init__(self):
         super().__init__()
 
@@ -143,8 +144,10 @@ class Fenetre(Tk):
         # On lie un clic sur le CanvasEchiquier à une méthode.
         self.canvas_echiquier.bind('<Button-1>', self.selectionner)
 
-        self.button = Button(self, text='Nouvelle Partie')
-        self.button.grid(row=2, column=2)
+        # Bouton Nouvelle Partie
+        self.button_nouvelle_partie = Button(self, text='Nouvelle Partie')
+        self.button_nouvelle_partie.grid()
+        self.button_nouvelle_partie.bind('<Button-1>', self.NouvellePartie)
 
 
     def selectionner(self, event):
@@ -155,7 +158,8 @@ class Fenetre(Tk):
 
         position = "{}{}".format(self.canvas_echiquier.lettres_colonnes[colonne], int(self.canvas_echiquier.chiffres_rangees[self.canvas_echiquier.n_lignes - ligne - 1]))
 
-        if self.position_selectionnee is None:  # Permet de vérifier s'il s'agit du premier click.
+        if self.position_selectionnee is None:  # Permet de vérifier s'il s'agit du premier clic.
+
             # Gestion des excpetions pour le choix de la pièce à bouger
             try:
                 piece = self.canvas_echiquier.pieces[position]
@@ -179,7 +183,7 @@ class Fenetre(Tk):
                 self.messages['foreground'] = 'red'
                 self.messages['text'] = 'Erreur: Aucune pièce à cet endroit.'
 
-        else:
+        else:  # Gère le cas où il s'agit d'un deuxième clic soit la position cible
             self.canvas_echiquier.partie.echiquier.deplacer(self.position_selectionnee, position)
             self.canvas_echiquier.delete('piece')
             self.canvas_echiquier.dessiner_cases()
@@ -188,8 +192,48 @@ class Fenetre(Tk):
             self.messages['foreground'] = 'black'
             self.messages['text'] = 'Aucune pièce est sélectionnée'
 
-    def NouvellePartie(self):
-        self.delete(self.canvas_echiquier.partie)
+    def NouvellePartie(self, event):
+        # On supprime les anciennes cases et on ajoute les nouvelles.
+        self.canvas_echiquier.delete('case')
         self.canvas_echiquier.dessiner_cases()
+
+        # On supprime les anciennes pièces et on ajoute les nouvelles.
+        self.canvas_echiquier.delete('piece')
+
+        self.canvas_echiquier.pieces = {
+            'a1': 'PB',
+            'b1': 'CB',
+            'c1': 'FB',
+            'd1': 'DB',
+            'e1': 'RB',
+            'f1': 'FB',
+            'g1': 'CB',
+            'h1': 'TB',
+            'a2': 'PB',
+            'b2': 'PB',
+            'c2': 'PB',
+            'd2': 'PB',
+            'e2': 'PB',
+            'f2': 'PB',
+            'g2': 'PB',
+            'h2': 'PB',
+            'a7': 'PN',
+            'b7': 'PN',
+            'c7': 'PN',
+            'd7': 'PN',
+            'e7': 'PN',
+            'f7': 'PN',
+            'g7': 'PN',
+            'h7': 'PN',
+            'a8': 'TN',
+            'b8': 'CN',
+            'c8': 'FN',
+            'd8': 'DN',
+            'e8': 'RN',
+            'f8': 'FN',
+            'g8': 'CN',
+            'h8': 'TN',
+        }
         self.canvas_echiquier.dessiner_pieces()
+
 

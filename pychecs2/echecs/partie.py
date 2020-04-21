@@ -93,10 +93,10 @@ class Partie:
 
         """
         while not self.partie_terminee():
-            print(self.echiquier)
-            print("\nAu tour du joueur {}".format(self.joueur_actif))
-            source, cible = self.demander_positions()
-            self.echiquier.deplacer(source, cible)
+            #print(self.echiquier)
+            #print("\nAu tour du joueur {}".format(self.joueur_actif))
+            #source, cible = self.demander_positions()
+            #self.echiquier.deplacer(source, cible)
             self.joueur_suivant()
 
         print(self.echiquier)
