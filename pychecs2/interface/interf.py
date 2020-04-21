@@ -2,7 +2,7 @@
 un échiquier dans un Canvas, puis de déterminer quelle case a été sélectionnée.
 
 """
-from tkinter import NSEW, Canvas, Label, Tk
+from tkinter import NSEW, Canvas, Label, Tk, Button
 from pychecs2.echecs.partie import Partie
 from pychecs2.echecs.echiquier import Echiquier
 
@@ -143,6 +143,9 @@ class Fenetre(Tk):
         # On lie un clic sur le CanvasEchiquier à une méthode.
         self.canvas_echiquier.bind('<Button-1>', self.selectionner)
 
+        self.button = Button(self, text='Nouvelle Partie')
+        self.button.grid(row=2, column=2)
+
 
     def selectionner(self, event):
         # On trouve le numéro de ligne/colonne en divisant les positions en y/x par le nombre de pixels par case.
@@ -152,7 +155,8 @@ class Fenetre(Tk):
 
         position = "{}{}".format(self.canvas_echiquier.lettres_colonnes[colonne], int(self.canvas_echiquier.chiffres_rangees[self.canvas_echiquier.n_lignes - ligne - 1]))
 
-        if self.position_selectionnee is None:
+        if self.position_selectionnee is None:  # Permet de vérifier s'il s'agit du premier click.
+            # Gestion des excpetions pour le choix de la pièce à bouger
             try:
                 piece = self.canvas_echiquier.pieces[position]
 
@@ -183,4 +187,9 @@ class Fenetre(Tk):
             self.position_selectionnee = None
             self.messages['foreground'] = 'black'
             self.messages['text'] = 'Aucune pièce est sélectionnée'
+
+    def NouvellePartie(self):
+        self.delete(self.canvas_echiquier.partie)
+        self.canvas_echiquier.dessiner_cases()
+        self.canvas_echiquier.dessiner_pieces()
 
