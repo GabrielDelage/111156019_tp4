@@ -7,7 +7,7 @@ Numéro de dossier (matricule) coéquipier 2 : 111 156 019
 
 Temps de réalisation total (estimé) : X heures
 
-Souhaitez-vous participer au prix Pierre Ardouin ? (OUI/NON) : 
+Souhaitez-vous participer au prix Pierre Ardouin ? (OUI/NON) : NON
 
 Correction
 ==========

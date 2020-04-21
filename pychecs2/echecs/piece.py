@@ -5,7 +5,7 @@
 # TODO: Si votre système n'affiche pas correctement les caractères unicodes du jeu d'échecs,
 # mettez cette constante (variable globale) à False. Un tutoriel est présent sur le site Web
 # du cours pour vous aider à faire fonctionner les caractères Unicoe sous Windows.
-UTILISER_UNICODE = True
+UTILISER_UNICODE = False
 
 
 class Piece:

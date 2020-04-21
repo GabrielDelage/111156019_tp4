@@ -4,14 +4,9 @@ Importez les modules nécessaires et démarrez votre programme à partir d'ici. 
 
 """
 from pychecs2.echecs.partie import Partie
-from pychecs2.interface.exemple import Fenetre
+from pychecs2.interface.interf import Fenetre
 
 if __name__ == '__main__':
-    # Création d'une instance de Partie.
-    p = Partie()
-
-    # Affichage de l'échiquier dans cette partie.
-    print(p.echiquier)
 
     # Création et affichage d'une fenêtre (aucun lien avec la partie ci-haut).
     f = Fenetre()

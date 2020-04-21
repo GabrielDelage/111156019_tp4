@@ -3,18 +3,19 @@ un échiquier dans un Canvas, puis de déterminer quelle case a été sélection
 
 """
 from tkinter import NSEW, Canvas, Label, Tk
-# Exemple d'importation de la classe Partie.
 from pychecs2.echecs.partie import Partie
+from pychecs2.echecs.echiquier import Echiquier
 
-# Dans ce fichier il faut lier les classe et méthodes du tp3 avec l'interface
 # Il faut aussi faire des classes d'exception que l'on va callback dans le programme de l'interface
 # en faisant de try-except
 
 class AucunePieceAPosition(Exception):
     pass
 
+
 class DeplacementInvalide(Exception):
     pass
+
 
 class PieceDeMauvaiseCouleur(Exception):
     pass
@@ -30,6 +31,9 @@ class CanvasEchiquier(Canvas):
         self.n_lignes = 8
         self.n_colonnes = 8
 
+        # Création d'une partie d'échec dans le Canvas
+        self.partie = Partie()
+
         # Noms des lignes et des colonnes.
         self.chiffres_rangees = ['1', '2', '3', '4', '5', '6', '7', '8']
         self.lettres_colonnes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
@@ -42,19 +46,14 @@ class CanvasEchiquier(Canvas):
         super().__init__(parent, width=self.n_lignes * n_pixels_par_case,
                          height=self.n_colonnes * self.n_pixels_par_case)
 
-        # Dictionnaire contenant les pièces. Vous devinerez, si vous réutilisez cette classe dans votre TP4,
-        # qu'il fandra adapter ce code pour plutôt utiliser la classe Echiquier.
-        self.pieces = {
-            'a1': 'TB', 'b1': 'CB', 'c1': 'FB', 'd1': 'DB', 'e1': 'RB', 'f1': 'FB', 'g1': 'CB', 'h1': 'TB',
-            'a2': 'PB', 'b2': 'PB', 'c2': 'PB', 'd2': 'PB', 'e2': 'PB', 'f2': 'PB', 'g2': 'PB', 'h2': 'PB',
-            'a7': 'PN', 'b7': 'PN', 'c7': 'PN', 'd7': 'PN', 'e7': 'PN', 'f7': 'PN', 'g7': 'PN', 'h7': 'PN',
-            'a8': 'TN', 'b8': 'CN', 'c8': 'FN', 'd8': 'DN', 'e8': 'RN', 'f8': 'FN', 'g8': 'CN', 'h8': 'TN',
-        }
+        # On utilise le dictionnaire de pièces intégré dans l'échiquier
+        self.pieces = self.partie.echiquier.dictionnaire_pieces
 
         # On fait en sorte que le redimensionnement du canvas redimensionne son contenu. Cet événement étant également
         # généré lors de la création de la fenêtre, nous n'avons pas à dessiner les cases et les pièces dans le
         # constructeur.
         self.bind('<Configure>', self.redimensionner)
+
 
     def dessiner_cases(self):
         """Méthode qui dessine les cases de l'échiquier.
@@ -99,7 +98,7 @@ class CanvasEchiquier(Canvas):
             # mesure de récupérer les éléments dans le canvas.
             coordonnee_y = (self.n_lignes - self.chiffres_rangees.index(position[1]) - 1) * self.n_pixels_par_case + self.n_pixels_par_case // 2
             coordonnee_x = self.lettres_colonnes.index(position[0]) * self.n_pixels_par_case + self.n_pixels_par_case // 2
-            self.create_text(coordonnee_x, coordonnee_y, text=caracteres_pieces[piece],
+            self.create_text(coordonnee_x, coordonnee_y, text=caracteres_pieces[str(piece)],
                              font=('Deja Vu', self.n_pixels_par_case//2), tags='piece')
 
     def redimensionner(self, event):
@@ -134,7 +133,7 @@ class Fenetre(Tk):
         self.grid_rowconfigure(0, weight=1)
 
         # Création du canvas échiquier.
-        self.canvas_echiquier = CanvasEchiquier(self, 60)
+        self.canvas_echiquier = CanvasEchiquier(self, 80)
         self.canvas_echiquier.grid(sticky=NSEW)
 
         # Ajout d'une étiquette d'information.
@@ -144,22 +143,44 @@ class Fenetre(Tk):
         # On lie un clic sur le CanvasEchiquier à une méthode.
         self.canvas_echiquier.bind('<Button-1>', self.selectionner)
 
+
     def selectionner(self, event):
         # On trouve le numéro de ligne/colonne en divisant les positions en y/x par le nombre de pixels par case.
         ligne = event.y // self.canvas_echiquier.n_pixels_par_case
         colonne = event.x // self.canvas_echiquier.n_pixels_par_case
+        nb_pix = self.canvas_echiquier.n_pixels_par_case
+
         position = "{}{}".format(self.canvas_echiquier.lettres_colonnes[colonne], int(self.canvas_echiquier.chiffres_rangees[self.canvas_echiquier.n_lignes - ligne - 1]))
 
-        # On récupère l'information sur la pièce à l'endroit choisi. Notez le try...except!
-        try:
-            piece = self.canvas_echiquier.pieces[position]
+        if self.position_selectionnee is None:
+            try:
+                piece = self.canvas_echiquier.pieces[position]
 
-            # On change la valeur de l'attribut position_selectionnee.
-            self.position_selectionnee = position
+                # On change la valeur de l'attribut position_selectionnee.
+                self.position_selectionnee = position
 
+                # On change la couleur de la case sélectionnée
+                debut_ligne = colonne * nb_pix
+                fin_ligne = debut_ligne + nb_pix
+                debut_colonne = ligne * nb_pix
+                fin_colonne = debut_colonne + nb_pix
+                self.canvas_echiquier.create_rectangle(debut_ligne, debut_colonne, fin_ligne, fin_colonne, fill='yellow')
+                self.canvas_echiquier.dessiner_pieces()
+
+                # Label de la pièce sélectionnée
+                self.messages['foreground'] = 'black'
+                self.messages['text'] = 'Pièce sélectionnée : {} à la position {}.'.format(piece, self.position_selectionnee)
+
+            except KeyError:
+                self.messages['foreground'] = 'red'
+                self.messages['text'] = 'Erreur: Aucune pièce à cet endroit.'
+
+        else:
+            self.canvas_echiquier.partie.echiquier.deplacer(self.position_selectionnee, position)
+            self.canvas_echiquier.delete('piece')
+            self.canvas_echiquier.dessiner_cases()
+            self.canvas_echiquier.dessiner_pieces()
+            self.position_selectionnee = None
             self.messages['foreground'] = 'black'
-            self.messages['text'] = 'Pièce sélectionnée : {} à la position {}.'.format(piece, self.position_selectionnee)
+            self.messages['text'] = 'Aucune pièce est sélectionnée'
 
-        except KeyError:
-            self.messages['foreground'] = 'red'
-            self.messages['text'] = 'Erreur: Aucune pièce à cet endroit.'
