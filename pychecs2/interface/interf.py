@@ -177,7 +177,7 @@ class Fenetre(Tk):
 
                 # Label de la pièce sélectionnée
                 self.messages['foreground'] = 'black'
-                self.messages['text'] = 'Pièce sélectionnée : {} à la position {}.'.format(piece, self.position_selectionnee)
+                self.messages['text'] = 'Pièce sélectionnée : {} à la position {}. Cliquez de nouveau pour désélectionner la pièce.'.format(piece, self.position_selectionnee)
 
             except KeyError:
                 self.messages['foreground'] = 'red'
@@ -194,46 +194,12 @@ class Fenetre(Tk):
 
     def NouvellePartie(self, event):
         # On supprime les anciennes cases et on ajoute les nouvelles.
-        self.canvas_echiquier.delete('case')
-        self.canvas_echiquier.dessiner_cases()
+        #self.canvas_echiquier.delete('case')
+        #self.canvas_echiquier.dessiner_cases()
 
         # On supprime les anciennes pièces et on ajoute les nouvelles.
         self.canvas_echiquier.delete('piece')
-
-        self.canvas_echiquier.pieces = {
-            'a1': 'PB',
-            'b1': 'CB',
-            'c1': 'FB',
-            'd1': 'DB',
-            'e1': 'RB',
-            'f1': 'FB',
-            'g1': 'CB',
-            'h1': 'TB',
-            'a2': 'PB',
-            'b2': 'PB',
-            'c2': 'PB',
-            'd2': 'PB',
-            'e2': 'PB',
-            'f2': 'PB',
-            'g2': 'PB',
-            'h2': 'PB',
-            'a7': 'PN',
-            'b7': 'PN',
-            'c7': 'PN',
-            'd7': 'PN',
-            'e7': 'PN',
-            'f7': 'PN',
-            'g7': 'PN',
-            'h7': 'PN',
-            'a8': 'TN',
-            'b8': 'CN',
-            'c8': 'FN',
-            'd8': 'DN',
-            'e8': 'RN',
-            'f8': 'FN',
-            'g8': 'CN',
-            'h8': 'TN',
-        }
-        self.canvas_echiquier.dessiner_pieces()
+        self.canvas_echiquier.pieces = self.canvas_echiquier.partie.echiquier.initialiser_echiquier_depart()
+        #self.canvas_echiquier.dessiner_pieces()
 
 
