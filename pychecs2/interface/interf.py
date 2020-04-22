@@ -175,13 +175,18 @@ class Fenetre(Tk):
         position = "{}{}".format(self.canvas_echiquier.lettres_colonnes[colonne], int(self.canvas_echiquier.chiffres_rangees[self.canvas_echiquier.n_lignes - ligne - 1]))
 
         if self.position_selectionnee is None:  # Permet de vérifier s'il s'agit du premier clic.
-
             # Gestion des excpetions pour le choix de la pièce à bouger
             try:
                 piece = self.canvas_echiquier.pieces[position]
+                couleur_piece = self.canvas_echiquier.partie.echiquier.couleur_piece_a_position(position)
+                couleur_joueur_actif = self.canvas_echiquier.partie.joueur_actif
 
                 # On change la valeur de l'attribut position_selectionnee.
-                self.position_selectionnee = position
+                if couleur_piece == couleur_joueur_actif:
+                    self.position_selectionnee = position
+                else:
+                    self.messages['foreground'] = 'red'
+                    self.messages['text'] = " Attention! La pièce sélectionnée n'est pas de la bonne couleur."
 
                 # On change la couleur de la case sélectionnée
                 debut_ligne = colonne * nb_pix
@@ -212,6 +217,7 @@ class Fenetre(Tk):
                 else:
                     self.messages['foreground'] = 'red'
                     self.messages['text'] = 'Attention! Ce déplacement est invalide'
+            self.canvas_echiquier.partie.joueur_suivant()
 
     def NouvellePartie(self, event):
         # On supprime les anciennes pièces et on ajoute les nouvelles.
