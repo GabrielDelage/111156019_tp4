@@ -3,7 +3,6 @@
 Importez les modules nécessaires et démarrez votre programme à partir d'ici. Le code fourni n'est qu'à titre d'exemple.
 
 """
-from pychecs2.echecs.partie import Partie
 from pychecs2.interface.interf import Fenetre
 
 if __name__ == '__main__':
