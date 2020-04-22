@@ -222,17 +222,17 @@ class Fenetre(Tk):
     def NouvellePartie(self, event):
         # On supprime les anciennes pièces et on ajoute les nouvelles.
         self.canvas_echiquier.delete('piece')
-        self.canvas_echiquier.partie.echiquier.dictionnaire_pieces.clear()
-        f = open('echiquier_initial', 'r')
-        liste_piece_position = f.readlines()
-        liste_position = []
-        liste_piece = []
-        for element in liste_piece_position:
-            liste_position.append(element[:2])
-            liste_piece.append(element[2:4])
+        #self.canvas_echiquier.partie.echiquier.dictionnaire_pieces.clear()
+        #f = open('echiquier_initial', 'r')
+        #liste_piece_position = f.readlines()
+        #liste_position = []
+        #liste_piece = []
+        #for element in liste_piece_position:
+        #    liste_position.append(element[:2])
+        #    liste_piece.append(element[2:4])
 
-        for i in range(len(liste_position)):
-            self.canvas_echiquier.partie.echiquier.dictionnaire_pieces[liste_position[i]] = liste_piece[i]
+        #for i in range(len(liste_position)):
+        #    self.canvas_echiquier.partie.echiquier.dictionnaire_pieces[liste_position[i]] = liste_piece[i]
 
         self.canvas_echiquier.dessiner_pieces()
 
@@ -249,10 +249,6 @@ class Fenetre(Tk):
             f.write(position)
             f.write(str(pieces))
             f.write('\n')
-
-        for position in liste_position_possible:
-            f.write(position+'  ')
-
 
         self.messages['foreground'] = 'black'
         self.messages['text'] = "Votre partie a bien été sauvegardée."
